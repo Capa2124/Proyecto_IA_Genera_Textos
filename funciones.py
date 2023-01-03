@@ -96,9 +96,6 @@ def es_patron(texto, candidato_a_patron):
         aux = True
     return aux    
 
-def busca_patronx(texto):
-
-    pass
 
 
 def busca_patron(texto):
