@@ -114,49 +114,40 @@ def busca_patron(texto):
                 #SI ES PATRON de 3 unicamente
                 patron_base.append(texto[aumento])
                 aumento+=1
-    """
-    AVANCE DE CAPILLO AL BUSQUEDA PATRON c:
-    
-    def is_sublist(list1, list2):
-    indice=0
-    for i in range(len(list1)):
-        if list1[i] in list2:
-            if i+1 < len(list1) and list1[i+1] in list2 and list2.index(list1[i])+1 == list2.index(list1[i+1]):
-                indice = list2.index(list1[i])
-                continue
-            elif i+1 >= len(list1) and list2[list2.index(list1[i])] == list2[indice+1]:
-                continue
+"""
+te amo capa <3
+def busca_p(list1, list2):
+    indice1 = 0
+    patron = 0
+    for i in range(len(list2)):
+        if list1[indice1] == list2[i]:
+            aux = i
+            for j in range (len(list1)):
+                if list1[indice1] == list2[aux]:
+                    indice1+=1
+                    aux+=1
+                else:
+                    break
+            if indice1 == len(list1):
+                indice1=0
+                patron +=1
             else:
-                return False
+                indice1=0
         else:
-            return False
-    return True
+            continue
 
+    if patron >=3:
+        return True, patron
+    else:
+        return False, patron
 
-# Test the function
-list1 = ['Harry', 'Potter', 'Snape'] #False
-list2 = ['v', 'a', 'b', 'c']
-print(is_sublist(list1, list2)) 
-
-list1 = ['Harry', 'Potter', 'Snape'] #False
-list2 = ['v', 'Harry', 'b', 'c']
-print(is_sublist(list1, list2)) 
 
 list1 = ['Harry', 'Potter', 'Snape'] #False
-list2 = ['v', 'Harry', 'Potter', 'c']
-print(is_sublist(list1, list2)) 
-
-list1 = ['Harry', 'Potter', 'Snape'] #False
-list2 = ['Harry', 'a', 'Potter', 'Snape']
-print(is_sublist(list1, list2)) 
-
+list2 = ['Harry', 'Potter', 'Snape', 'Harry', 'Potter', 'Snape'] #texto del libro
+print(busca_p(list1, list2)) 
 
 list1 = ['Harry', 'Potter', 'Snape'] #True
-list2 = ['Harry', 'Potter', 'Snape']
-print(is_sublist(list1, list2)) 
-
-list1 = ['Harry', 'Potter', 'Snape'] #True
-list2 = ['a', 'Harry',  'Potter', 'Snape', 'b']
-print(is_sublist(list1, list2))
+list2 = ['a', 'Harry',  'Potter', 'Snape', 'b', 'Harry', 'Potter', 'Harry', 'Potter', 'Snape', 'a','Harry', 'Potter', 'Snape','Harry', 'Potter', 'Snape','Harry', 'Potter', 'Snape','Harry', 'Potter', 'Snape']
+print(busca_p(list1, list2))
 """
 

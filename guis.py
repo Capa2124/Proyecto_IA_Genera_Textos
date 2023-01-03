@@ -1,5 +1,5 @@
 import tkinter
-from tkinter import ttk
+from tkinter import *
 
 def ventana_Principal():
     ventanaPrincipal = tkinter.Tk()
@@ -58,6 +58,7 @@ def ventanaSecundariaConTexto(escrito):
     ventanaTexto.geometry("400x300+700+400")
     texto = tkinter.Label(ventanaTexto,text = escrito)
     texto.pack()
+    texto.config(width = 50, height = 50)
     boton_cerrar = tkinter.Button(ventanaTexto, text = "Aceptar", command = ventanaTexto.destroy)
     boton_cerrar.pack()
     ventanaTexto.mainloop()
