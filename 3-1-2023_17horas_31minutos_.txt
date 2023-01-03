@@ -1,3 +1,0 @@
-Se leyo el PDF y se extrajo el texto desde la página 100 hasta 1000
-Se realizo la limpieza del texto.
-Se crea un diccionario con todas las palabras del texto y sus siguientes palabras.
