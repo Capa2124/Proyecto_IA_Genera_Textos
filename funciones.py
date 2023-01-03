@@ -71,13 +71,13 @@ def diccionario_obj(lista):
     return diccionario
 
 def crea_oracion(diccionario, tamanio, probabilidad, referencia = "harry"):
-    textoF = ""
+    textoFinal = ""
     for i in range(int(tamanio)):
         escribe_bitacora("Referencia: " +  referencia + "  sig palabras: " + str(diccionario[referencia].tupla_sig_palabra) + "\n\n")
-        textoF += referencia + " "
+        textoFinal += referencia + " "
         aux = diccionario[referencia]
         referencia = aux.get_sig_palabra(probabilidad)
-    return textoF
+    return textoFinal
 
 def crea_excel(diccionario):
     archivo = xl.Workbook('Base_datos.xlsx')
@@ -89,3 +89,74 @@ def crea_excel(diccionario):
         hoja.write(i,2, str(valor.tupla_sig_palabra))
         i+=1
     archivo.close()
+
+def es_patron(texto, candidato_a_patron):
+    aux = False
+    if (texto.count(candidato_a_patron) >= 3):
+        aux = True
+    return aux    
+
+def busca_patronx(texto):
+
+    pass
+
+
+def busca_patron(texto):
+    for i in range (0,(len(texto))):
+        aux = 0
+        patron_base = [texto[i], texto[i+1], texto[i+2]]
+        aumento = i+3
+        for j in range(aumento, len(texto)):
+            if patron_base[0] == texto[j] and patron_base[1] == texto[j+1] and patron_base[2] == texto[j+2]:
+                #buscamos más para saber si es patrón
+                aux+=1
+            if aux>=3:
+                #SI ES PATRON de 3 unicamente
+                patron_base.append(texto[aumento])
+                aumento+=1
+    """
+    AVANCE DE CAPILLO AL BUSQUEDA PATRON c:
+    
+    def is_sublist(list1, list2):
+    indice=0
+    for i in range(len(list1)):
+        if list1[i] in list2:
+            if i+1 < len(list1) and list1[i+1] in list2 and list2.index(list1[i])+1 == list2.index(list1[i+1]):
+                indice = list2.index(list1[i])
+                continue
+            elif i+1 >= len(list1) and list2[list2.index(list1[i])] == list2[indice+1]:
+                continue
+            else:
+                return False
+        else:
+            return False
+    return True
+
+
+# Test the function
+list1 = ['Harry', 'Potter', 'Snape'] #False
+list2 = ['v', 'a', 'b', 'c']
+print(is_sublist(list1, list2)) 
+
+list1 = ['Harry', 'Potter', 'Snape'] #False
+list2 = ['v', 'Harry', 'b', 'c']
+print(is_sublist(list1, list2)) 
+
+list1 = ['Harry', 'Potter', 'Snape'] #False
+list2 = ['v', 'Harry', 'Potter', 'c']
+print(is_sublist(list1, list2)) 
+
+list1 = ['Harry', 'Potter', 'Snape'] #False
+list2 = ['Harry', 'a', 'Potter', 'Snape']
+print(is_sublist(list1, list2)) 
+
+
+list1 = ['Harry', 'Potter', 'Snape'] #True
+list2 = ['Harry', 'Potter', 'Snape']
+print(is_sublist(list1, list2)) 
+
+list1 = ['Harry', 'Potter', 'Snape'] #True
+list2 = ['a', 'Harry',  'Potter', 'Snape', 'b']
+print(is_sublist(list1, list2))
+"""
+
