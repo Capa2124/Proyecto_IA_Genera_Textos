@@ -10,8 +10,6 @@ class Patron:
         self.tupla_sig_palabras = ()
         self.diccionario_sig_patron = {}
         self.tupla_sig_patrones = ()
-
-
     
     def agrega_sig_palabra(self, sig_palabra):
         if sig_palabra in self.diccionario_sig_palabra.keys():
@@ -49,5 +47,3 @@ class Patron:
 
     def ordena_diccionario(self):
         self.tupla_sig_palabras = sorted(self.diccionario_sig_palabra.items(), key=operator.itemgetter(1), reverse=True) 
-    
-    

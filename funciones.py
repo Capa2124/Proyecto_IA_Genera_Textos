@@ -5,14 +5,6 @@ from os import system
 from palabra import *
 import xlsxwriter as xl
 
-
-def menu():
-    tamanio     = input("¿Cuántas palabras desea que tenga la oración?\n")
-    referencia  = input("¿Dame la referencia para comenzar la oración?\n")
-    probabilidad= input("Deseas que la probabilidad de selección de siguiente palabra sea:\n-A.Alta\n-B.Baja\n-M.Media\n")
-    system("clear")
-    return tamanio, referencia, probabilidad
-
 def lector(inicio, fin):
     reader = PdfReader("Harry_Potter.pdf")
     for i in range(inicio,fin):
@@ -29,6 +21,7 @@ def limpieza(text):
     basura = "—-_'!¡¿?…:;.,«»()"
     text = ''.join(x for x in text if x not in basura)
     text = re.sub("\n"," ",text)
+    text = re.sub("  +"," ",text)
     text = text.lower()
     #print(text)
     escribe_bitacora("Se realizo la limpieza del texto.\n")
@@ -88,66 +81,92 @@ def crea_excel(diccionario):
         hoja.write(i,1, valor.num_ocurrencia+1)
         hoja.write(i,2, str(valor.tupla_sig_palabra))
         i+=1
-    archivo.close()
+    archivo.close()  
+
+def separa_texto(texto):
+    return texto.split(" ")
 
 def es_patron(texto, candidato_a_patron):
     aux = False
-    if (texto.count(candidato_a_patron) >= 3):
+    if (texto.count(candidato_a_patron) >= 5):
         aux = True
-    return aux    
+    return aux  
 
-def busca_patronx(texto):
+def busca_patron(texto, tamanio):
+    patrones = []
+    lista_palabras = separa_texto(texto)
+    i = 0
+    while i < len(lista_palabras)-tamanio:
+        candidato = str(lista_palabras[i])
+        for j in range(i+1, i+tamanio):
+            candidato += " "
+            candidato += str(lista_palabras[j])        
+        #en caso de ser patrón entonces se agrega a la lista de patrones
+        if(es_patron(texto, candidato) and candidato not in patrones):
+            #agrega_patron(texto, candidato)
+            patrones.append(candidato)
+            i += tamanio 
+        #en caso contrario entonces buscamos con un nuevo conjunto de palabras   
+        else:
+            i += 1
+    return patrones
 
-    pass
+def revicion_NuevoPatron(cadenaCorta, cadenaLarga):
+    for i in cadenaLarga:
+        for j in cadenaCorta:
+            if (i.find(j) != -1):
+                print(j)
+                cadenaCorta.remove(j)
+    cadenaLarga = cadenaLarga + cadenaCorta
+    #Regresa la cadenaLarga junto a la cadenaCorta pero sin las cendeas que se repiten
+    return cadenaLarga
 
+def superPatrones(libro):
+    patrones4 = busca_patron(libro, 4)
+    patrones3 = busca_patron(libro, 3)
+    patrones2 = busca_patron(libro, 2)
+    patrones4y3 = revicion_NuevoPatron(patrones3,patrones4)
+    superPat = revicion_NuevoPatron(patrones2,patrones4y3)
+    return superPat
 
-def busca_patron(texto):
-    for i in range (0,(len(texto))):
-        aux = 0
-        patron_base = [texto[i], texto[i+1], texto[i+2]]
-        aumento = i+3
-        for j in range(aumento, len(texto)):
-            if patron_base[0] == texto[j] and patron_base[1] == texto[j+1] and patron_base[2] == texto[j+2]:
-                #buscamos más para saber si es patrón
-                aux+=1
-            if aux>=3:
-                #SI ES PATRON de 3 unicamente
-                patron_base.append(texto[aumento])
-                aumento+=1
 """
-te amo capa <3
+def p_base(base, texto, busqueda, lista):
+    if busca_p(base, texto)[0]:
+        if busqueda < len(texto):
+            base.append(texto[busqueda])
+            p_base(base, texto, busqueda+len(base), lista)
+        if base[:-1] not in lista:
+            lista.append(base[:-1])
+        return busqueda, lista
+    else:
+        if busqueda+len(base)<len(texto):
+            busqueda += len(base)
+        return busqueda, lista
+
 def busca_p(list1, list2):
     indice1 = 0
     patron = 0
+    indices_p = []
     for i in range(len(list2)):
         if list1[indice1] == list2[i]:
             aux = i
-            for j in range (len(list1)):
+            for j in range(len(list1)):
                 if list1[indice1] == list2[aux]:
-                    indice1+=1
-                    aux+=1
+                    indice1 += 1
+                    aux += 1
                 else:
                     break
             if indice1 == len(list1):
-                indice1=0
-                patron +=1
+                indices_p.append(aux-len(list1))
+                indice1 = 0
+                patron += 1
             else:
-                indice1=0
+                indice1 = 0
         else:
             continue
 
-    if patron >=3:
-        return True, patron
+    if patron >= 3:
+        return True, patron, indices_p
     else:
-        return False, patron
-
-
-list1 = ['Harry', 'Potter', 'Snape'] #False
-list2 = ['Harry', 'Potter', 'Snape', 'Harry', 'Potter', 'Snape'] #texto del libro
-print(busca_p(list1, list2)) 
-
-list1 = ['Harry', 'Potter', 'Snape'] #True
-list2 = ['a', 'Harry',  'Potter', 'Snape', 'b', 'Harry', 'Potter', 'Harry', 'Potter', 'Snape', 'a','Harry', 'Potter', 'Snape','Harry', 'Potter', 'Snape','Harry', 'Potter', 'Snape','Harry', 'Potter', 'Snape']
-print(busca_p(list1, list2))
+        return False, patron, indices_p
 """
-

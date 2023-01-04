@@ -2,6 +2,7 @@ import funciones as fcf
 import guis as gi
 
 def main():
+    #4617 Paginas totales
     textoSucio = fcf.lector(100,1000)
     textoLimpio = fcf.limpieza(textoSucio)
     lista_palabras = fcf.separa_texto(textoLimpio)
@@ -33,8 +34,7 @@ def main():
     textoFinal = fcf.crea_oracion(dict, valores_usuario[0], aux, valores_usuario[4])
     textoFinal = fcf.mejora_oracion(textoFinal)
     """
-    textoFinal = "Una vez tenia un felipe dentro y luego murio por que se ahogo ya que el pequeño felipe no tenia anocas estas son como las branqueas pero en forma de ano"
-    gi.ventanaSecundariaConTexto(textoFinal)
+    #gi.ventanaSecundariaConTexto(textoFinal)
     #fcf.escribe_bitacora("La oracion final es: " + textoFinal)
 
 main()

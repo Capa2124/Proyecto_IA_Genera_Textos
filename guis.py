@@ -55,10 +55,22 @@ def ventanaSecundariaConTexto(escrito):
     # Crear una ventana secundaria.
     ventanaTexto = tkinter.Tk()
     ventanaTexto.title("Generador de textos empleando cadenas de Markov")
-    ventanaTexto.geometry("400x300+700+400")
-    texto = tkinter.Label(ventanaTexto,text = escrito)
+    ventanaTexto.geometry("500x300+700+400")
+
+    escrito = escrito.split()
+    contador = 0
+    escritoAux = ""
+    for i in escrito:  
+        escritoAux = escritoAux + i + " "
+        if contador >= 10:
+            escritoAux = escritoAux + "\n"
+            contador = 0
+        else:
+            contador += 1
+
+    texto = tkinter.Label(ventanaTexto, text = escritoAux)
     texto.pack()
-    texto.config(width = 50, height = 50)
+    #texto.config(width = 50)
     boton_cerrar = tkinter.Button(ventanaTexto, text = "Aceptar", command = ventanaTexto.destroy)
     boton_cerrar.pack()
     ventanaTexto.mainloop()
