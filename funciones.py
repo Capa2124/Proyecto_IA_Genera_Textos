@@ -6,14 +6,6 @@ from os import system
 from palabra import *
 #import xlsxwriter as xl
 
-
-def menu():
-    tamanio     = input("¿Cuántas palabras desea que tenga la oración?\n")
-    referencia  = input("¿Dame la referencia para comenzar la oración?\n")
-    probabilidad= input("Deseas que la probabilidad de selección de siguiente palabra sea:\n-A.Alta\n-B.Baja\n-M.Media\n")
-    system("clear")
-    return tamanio, referencia, probabilidad
-
 def lector(inicio, fin):
     nombreLibro = "Harry_Potter"
     if(not os.path.isfile(nombreLibro + str(inicio) + str(fin) + ".txt")):
@@ -41,6 +33,7 @@ def limpieza(text):
     text = repar_palabras(text)
     text = ''.join(x for x in text if x not in basura)
     text = re.sub("\n"," ",text)
+    text = re.sub("  +"," ",text)
     text = re.sub("\t"," ",text)
     text = re.sub("  +"," ",text)
     text = repar_palabras(text)
@@ -152,6 +145,7 @@ def busca_p(list1, list2):
                 indice1 = 0
         else:
             continue
+
     if patron >= 10:
         return True, patron, indices_p
     else:
