@@ -2,18 +2,12 @@ import funciones as fcf
 import guis as gi
 
 def main():
-    textoSucio = fcf.lector(100,1000)
+    textoSucio = fcf.lector(100,150)
     textoLimpio = fcf.limpieza(textoSucio)
     lista_palabras = fcf.separa_texto(textoLimpio)
-    dict = fcf.diccionario_obj(lista_palabras)
-
-    #SECCION DE LECTURA DE LIBRO PARA BUSQUEDA DE PATRON#
-    #fcf.busca_patron(lista_palabras)
-    #fcf.es_patron()
+    #dict = fcf.diccionario_obj(lista_palabras)
+    fcf.func_main(lista_palabras)
     
-    #fcf.crea_excel(dict)
-    
-    #Paso de los parametros por el usuario
     """
     valores_usuario = gi.ventana_Principal()
 
@@ -33,8 +27,8 @@ def main():
     textoFinal = fcf.crea_oracion(dict, valores_usuario[0], aux, valores_usuario[4])
     textoFinal = fcf.mejora_oracion(textoFinal)
     """
-    textoFinal = "Una vez tenia un felipe dentro y luego murio por que se ahogo ya que el pequeño felipe no tenia anocas estas son como las branqueas pero en forma de ano"
-    gi.ventanaSecundariaConTexto(textoFinal)
+    
+
     #fcf.escribe_bitacora("La oracion final es: " + textoFinal)
 
 main()
