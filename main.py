@@ -4,14 +4,11 @@ import guis as gi
 def main():
 
     textoSucio = fcf.lector(100,150)
-
     #4617 Paginas totales
-    textoSucio = fcf.lector(100,1000)
 
     textoLimpio = fcf.limpieza(textoSucio)
     lista_palabras = fcf.separa_texto(textoLimpio)
-    #dict = fcf.diccionario_obj(lista_palabras)
-    fcf.func_main(lista_palabras)
+    #dict = fcf.diccionario_palabras(lista_palabras)
     
     """
     valores_usuario = gi.ventana_Principal()
@@ -32,12 +29,6 @@ def main():
     textoFinal = fcf.crea_oracion(dict, valores_usuario[0], aux, valores_usuario[4])
     textoFinal = fcf.mejora_oracion(textoFinal)
     """
-
-
-
-    
-    
-    
     #fcf.escribe_bitacora("La oracion final es: " + textoFinal)
 
 main()

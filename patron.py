@@ -8,7 +8,7 @@ class Patron:
         self.num_sig_palabra   = 0
         self.diccionario_sig_palabra = {}
         self.tupla_sig_palabras = ()
-        self.diccionario_sig_patron = {}
+        self.diccionario_sig_patron  = {}
         self.tupla_sig_patrones = ()
     
     def agrega_sig_palabra(self, sig_palabra):

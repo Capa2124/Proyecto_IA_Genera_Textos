@@ -8,6 +8,8 @@ class Palabra:
         self.num_ocurrencia    = 0
         self.num_sig_palabra   = 0
         self.diccionario_sig_palabra = {}
+        self.diccionario_sig_patron = {}
+        self.tupla_sig_patron = ()
         self.tupla_sig_palabra = ()
     
     def agrega_sig_palabra(self, sig_palabra):
@@ -15,6 +17,12 @@ class Palabra:
             self.diccionario_sig_palabra[sig_palabra] += 1
         else:
             self.diccionario_sig_palabra[sig_palabra] = 1
+
+    def agrega_sig_patron(self, sig_patron):
+        if sig_patron in self.diccionario_sig_patron.keys():
+            self.diccionario_sig_patron[sig_patron] += 1
+        else:
+            self.diccionario_sig_patron[sig_patron] = 1
         
 
     def elimina_sig_palabra(self, palabra_eliminar):
@@ -54,7 +62,8 @@ class Palabra:
         return self.tupla_sig_palabra[aleatorio][0]
 
 #Para acceder a la clave se usa self.tupla_sig_palabra[1][0]
-#Para acceder al valor se usa   self.tupla_sig_palabra[1][0]
+#Para acceder al valor se usa   self.tupla_sig_palabra[0][1]
     def ordena_diccionario(self):
         self.tupla_sig_palabra = sorted(self.diccionario_sig_palabra.items(), key=operator.itemgetter(1), reverse=True) 
+        
         
