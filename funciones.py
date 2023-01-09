@@ -179,7 +179,7 @@ def diccionario_patrones(lista, libro):
     diccionario_patrones, lista_ultima_palabra = busqueda_patrones(lista_palabras) #{"de harry": ocurrencia}  [[index_ultima_palabra_en_patron], [...]]
 
     escribe_bitacora("Se crea un diccionario con todos los patrones del texto y sus siguientes patrones.\n")
-    return agrega_sig_patron(lista_palabras, lista_ultima_palabra, diccionario_patrones)
+    return agrega_sig_elemento(lista_palabras, lista_ultima_palabra, diccionario_patrones)
 
 
 def agrega_sig_elemento(lista_palabras, lista_inicio_patron, diccionario_patrones):
@@ -198,8 +198,14 @@ def agrega_sig_elemento(lista_palabras, lista_inicio_patron, diccionario_patrone
     #[palabra, {sig_patron : aparicion}; {sig_palabra: aparicion}]
     for i in range(lista_palabras): #LEEMOS TODAS LAS PALABRAS DEL TEXTO
         for list_main in lista_inicio_patron: #ITERAMOS DENTRO DE LA LISTA PRINCIPAL
+            if i+1 in list_main:
+                # Ivan Aquí debo considerar dos casos. El primero es que la palabra/patrón existe en el 
+                # diccionario asociado a otra palabra.
+                # La segunda es si no existe. En este caso se debe crear.  
+            
             for indices in list_main:   #ITERAMOS CADA UNA DE LAS LISTAS DE LA LISTA PRINCIPAL PARA SABER SI EL INDICE SE ENCUENTRA C:
                 if i+1 in indices: #SI ENCUENTRA EL INDICE ENTONCES TENEMOS PATROS SIGUIENTE A PALABRA
+                    if patron in diccionario_sig_patron[lista_palabras[i+1]]:
                     lista_palabras[i].agrega_sig_patron(patron)
                     bandera=True
                     break
