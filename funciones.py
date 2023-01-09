@@ -201,7 +201,9 @@ def agrega_sig_elemento(lista_palabras, lista_inicio_patron, diccionario_patrone
             if i+1 in list_main:
                 # Ivan Aquí debo considerar dos casos. El primero es que la palabra/patrón existe en el 
                 # diccionario asociado a otra palabra.
-                # La segunda es si no existe. En este caso se debe crear.  
+                # La segunda es si no existe. En este caso se debe crear.
+                # También es necesario saber si la sig_palabra existe dentro del diccionario_sig_palabra
+                # Analizar cómo se deben devolver las listas de objetos   
             
             for indices in list_main:   #ITERAMOS CADA UNA DE LAS LISTAS DE LA LISTA PRINCIPAL PARA SABER SI EL INDICE SE ENCUENTRA C:
                 if i+1 in indices: #SI ENCUENTRA EL INDICE ENTONCES TENEMOS PATROS SIGUIENTE A PALABRA
@@ -215,30 +217,7 @@ def agrega_sig_elemento(lista_palabras, lista_inicio_patron, diccionario_patrone
             lista_palabras[i].agrega_sig_palabra=lista_palabras[i+1]
         bandera = False
 
-        """
-            j = i+3
-            #analizamos el patrón más grande que le continúa 
-            while aux in diccionario_patrones.keys():
-                #print(aux)
-                # Si el sig patrón no está en el diccionario entonces lo añadimos
-                if aux not in diccionario_sig_patron:
-                    diccionario_sig_patron = Patron(aux) # Iván Considerar si Patron y palabra pueden formar parte de la misma clase
-                # Si el sig_patron está en el diccionario entonces sumamos 1 a su ocurrencia 
-                else:
-                    diccionario_sig_patron[aux].num_ocurrencia += 1
-                
-                # es necesario agregar a la lista de patrones con su ocurrencia   
-                aux +=  lista_palabras[j]
-                j += 1
-                flag = True
-            
-            # si no está el patrón se debe agregar al diccionario de palabras
-            if flag == False:
-                if lista_palabras[i+1] in diccionario_sig_palabra:
-                    diccionario_sig_palabra = Palabra(lista_palabras[i+1])
-                else:
-                    diccionario_sig_palabra[lista_palabras[i+1]].num_ocurrencia += 1
-        """
+      
         
         return diccionario_sig_palabra, diccionario_sig_patron
         
