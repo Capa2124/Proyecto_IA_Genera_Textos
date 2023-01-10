@@ -4,7 +4,6 @@ import re
 import os
 from os import system
 from palabra import *
-from patron import *
 import xlsxwriter as xl
 import openpyxl
 
@@ -44,6 +43,13 @@ def limpieza(text:str):
     text = repar_palabras(text) #Repara algunas palabras 
     #escribe_bitacora("Se realizo la limpieza del texto.\n")
     return text
+
+def limpieza2(text:str):
+    carateresEspeciales = "[]()'"
+    text = ''.join(x for x in text if x not in carateresEspeciales)#Elimina todos los carateres especiales
+    text.split(", ")
+    return text
+
 
 def repar_palabras(libro_aReparar:str):
     libro_aReparar = libro_aReparar.replace(' v ', ' v')
@@ -101,15 +107,22 @@ def juntarSplit(patron):
             patronJunto = patronJunto + " " + i
     return patronJunto
 
-def referenciaSigElemento(ListaPatron:list, referenciaPatron:str, similarPatrones:int):
+def referenciaSigElemento(ListaPatron:list, dicccionario, referenciaPatron:str, similarPatrones:int, probabilidad:str): #Lista_Patron = regresa busqueda_patron, referenciaPatron = referenciaUsuario, #similarPatrones = .5
     case = 1
     bandera = True
     while bandera:
-        #print("Caso: ", case)
         if case == 1:
             if referenciaPatron in ListaPatron:
-                bandera = False
-                return referenciaPatron#Aqui se regresa el siguiente elememento
+                bandera = False 
+                listaReferencia  = referenciaPatron.split()
+                if len(dicccionario[listaReferencia[-1]].tupla_sig_patron) == 0:
+                    return dicccionario[listaReferencia[-1]].get_sig_palabra(probabilidad)
+                else:
+                    return dicccionario[listaReferencia[-1]].get_sig_patron(probabilidad)
+            elif len(referenciaPatron.split()) == 1:
+                bandera = False 
+                listaReferencia  = referenciaPatron.split()
+                return dicccionario[listaReferencia[-1]].get_sig_palabra(probabilidad)
             else:
                 case = 2
         elif case == 2:
@@ -149,77 +162,40 @@ def separa_texto(texto):
     return texto.split(" ")
 
 
-def diccionario_palabras(lista): #Diccionario objetos de lista palabra
-    diccionario = {}
-    for i in range(len(lista)-1):
-        if lista[i] not in diccionario.keys():
-            #print("Guarda", palabra)
-            diccionario[lista[i]] = Palabra(lista[i])
-        else:
-            diccionario[lista[i]].num_ocurrencia += 1
-        
-        diccionario[lista[i]].agrega_sig_palabra(lista[i+1])
-    
-    for i in diccionario.keys():
-        diccionario[i].cierra_tabla()
-        
-    escribe_bitacora("Se crea un diccionario con todas las palabras del texto y sus siguientes palabras.\n")
-    return diccionario
-
-def diccionario_patrones(lista, libro):
-    #diccionario de objetos patrón
-    diccionario = {}
-    lista_palabras = separa_texto(libro)
-    for i in lista:
-        aparicion = libro.count(i)
-        diccionario[i] = aparicion
-        
-    #Aquí falta mandar a llamar a la función de Capa
-
-    diccionario_patrones, lista_ultima_palabra = busqueda_patrones(lista_palabras) #{"de harry": ocurrencia}  [[index_ultima_palabra_en_patron], [...]]
-
-    escribe_bitacora("Se crea un diccionario con todos los patrones del texto y sus siguientes patrones.\n")
-    return agrega_sig_elemento(lista_palabras, lista_ultima_palabra, diccionario_patrones)
-
-
 def agrega_sig_elemento(lista_palabras, lista_inicio_patron, diccionario_patrones):
-    # debo construir una función capaz de obtener las dos primeras palabras y 
+    # función capaz de obtener las dos primeras palabras y 
     # analizar si forman parte de un patrón ya existente y cuántas veces continúa al patrón anterior  
     # En caso de que no entonces la palabra será incluida en la lista sig palabra 
-    diccionario_sig_patron = {}
-    diccionario_sig_palabra = {}
-
+    diccionario = {}
+    bandera = False
     #lista_palabras=["Harry", "ron", "hermione", "estaban", "comiendo"]
     # ron hermione ...
-    # lista_palabras= Harry Potter ron hermione y harry
+    # lista_palabras= Harry ron hermione y harry ron hermione y harry
     # diccionario_capa = {"harry potter ron":3, "ron hermione y voldemort":4, "sin ti":4, "contigo no":4, "lord voldemort":6}
     # lista_ultima_palabra = [[2, 12, 223],[987, 543, 123, 443, ],[ 4432, 223, 554,432], [324, 4324, 223,44], [4432, 443, 5454, 6565, 343,555]]
-    
+    keys_diccionario_patrones = list(diccionario_patrones.keys())
     #[palabra, {sig_patron : aparicion}; {sig_palabra: aparicion}]
-    for i in range(lista_palabras): #LEEMOS TODAS LAS PALABRAS DEL TEXTO
-        for list_main in lista_inicio_patron: #ITERAMOS DENTRO DE LA LISTA PRINCIPAL
-            if i+1 in list_main:
-                # Ivan Aquí debo considerar dos casos. El primero es que la palabra/patrón existe en el 
-                # diccionario asociado a otra palabra.
-                # La segunda es si no existe. En este caso se debe crear.
-                # También es necesario saber si la sig_palabra existe dentro del diccionario_sig_palabra
-                # Analizar cómo se deben devolver las listas de objetos   
-            
-            for indices in list_main:   #ITERAMOS CADA UNA DE LAS LISTAS DE LA LISTA PRINCIPAL PARA SABER SI EL INDICE SE ENCUENTRA C:
-                if i+1 in indices: #SI ENCUENTRA EL INDICE ENTONCES TENEMOS PATROS SIGUIENTE A PALABRA
-                    if patron in diccionario_sig_patron[lista_palabras[i+1]]:
-                    lista_palabras[i].agrega_sig_patron(patron)
-                    bandera=True
-                    break
-            if bandera:
-                break
-        if not bandera:
-            lista_palabras[i].agrega_sig_palabra=lista_palabras[i+1]
-        bandera = False
-
-      
+    for i in range(len(lista_palabras)-1): #LEEMOS TODAS LAS PALABRAS DEL TEXTO
         
-        return diccionario_sig_palabra, diccionario_sig_patron
+        if lista_palabras[i] in diccionario.keys():
+            diccionario[lista_palabras[i]].num_ocurrencia += 1
+        else:
+            diccionario[lista_palabras[i]] = Palabra(lista_palabras[i])
+        for j in range(0, len(lista_inicio_patron)): #ITERAMOS DENTRO DE LA LISTA PRINCIPAL
+            if i+1 in lista_inicio_patron[j]:
+                patron_actual = keys_diccionario_patrones[j]
+                bandera = True
+                break
+        if bandera:
+            diccionario[lista_palabras[i]].agrega_sig_patron(patron_actual)
+            diccionario[lista_palabras[i]].agrega_sig_palabra(lista_palabras[i+1])
+            bandera = False
+        else:
+            diccionario[lista_palabras[i]].agrega_sig_palabra(lista_palabras[i+1]) 
+    for i in diccionario.keys():
+        diccionario[i].cierra_tabla()
+    escribe_bitacora("Se crea un diccionario con todos los elementos del texto y sus siguientes elementos.\n")
+    return diccionario
         
 def crea_oracion(diccionario, tamanio, probabilidad, referencia = "harry"):
     textoFinal = ""
@@ -230,13 +206,13 @@ def crea_oracion(diccionario, tamanio, probabilidad, referencia = "harry"):
         referencia = aux.get_sig_palabra(probabilidad)
     return textoFinal
 
-def crea_Narrativa(ListaPatron:list, numeroIteraciones:int, similarPatrones:int, referencia:str):
+def crea_Narrativa(ListaPatron:list, diccionario, numeroIteraciones:int, similarPatrones:int, referencia:str, probabilidad:str):
     textoFinal = ""
     for i in range(1, numeroIteraciones + 1):
         if i == 1:
             textoFinal = referencia
         else:
-            sigReferencia = referenciaSigElemento(ListaPatron, referencia, similarPatrones)
+            sigReferencia = referenciaSigElemento(ListaPatron, diccionario, referencia, similarPatrones, probabilidad)
             textoFinal = textoFinal + " " + sigReferencia
             referencia = sigReferencia
     return textoFinal
@@ -252,7 +228,7 @@ def leePatrones():
     patron = file.readlines()
     listaPatron = []
     for i in patron:
-        listaPatron.append(limpieza_saltoLinea(i)) 
+        listaPatron.append(limpieza_saltoLinea(i))
     file.close()
     return listaPatron
 
@@ -264,6 +240,7 @@ def crea_excel(diccionario):
         hoja.write(i,0, llave)
         hoja.write(i,1, valor.num_ocurrencia+1)
         hoja.write(i,2, str(valor.tupla_sig_palabra))
+        hoja.write(i,3, str(valor.tupla_sig_patron))
         i+=1
     archivo.close()
 
@@ -306,7 +283,7 @@ def es_patron(list1, list2):
                 indice1 = 0
         else:
             continue
-    if patron >= 10:
+    if patron >= 3:
         return True, patron, indices_p
     else:
         return False, patron, indices_p
@@ -328,14 +305,16 @@ def busqueda_patrones(texto):
 
 def lee_excel():
     dict = {}
+    lista_final = []
+    lista_finalP = []
+    li_t = ()
+    li_p = ()
     i=1
     dataframe = openpyxl.load_workbook("Base_datos.xlsx")
-
     # Define variable to read sheet
     dataframe1 = dataframe.active
-
     # Iterate the loop to read the cell values
-    for row in range(0, int(dataframe1.max_row/1000)):
+    for row in range(0, int(dataframe1.max_row)):
         for columna in dataframe1.iter_cols(1, dataframe1.max_column):
             if i == 1:
                 dict[columna[row].value]=Palabra(columna[row].value)
@@ -344,7 +323,25 @@ def lee_excel():
             elif i == 2:
                 dict[llave].num_ocurrencia=columna[row].value
                 i+=1
-            else:
+            elif i==3:
                 dict[llave].diccionario_sig_palabra = columna[row].value
+                listaP=limpieza2(columna[row].value).split(", ")
+                for z in range(1,len(listaP),2):
+                    li_p = (listaP[z-1], float(listaP[z]))
+                    lista_finalP.append(li_p)
+                dict[llave].tupla_sig_palabra = lista_finalP
+                lista_finalP = []
                 i+=1
+            else:
+                dict[llave].diccionario_sig_patron = columna[row].value
+                #dict[llave].diccionario_sig_patron = list((columna[row].value).split(" "))
+                listaL=limpieza2(columna[row].value).split(", ")
+                for x in range(1,len(listaL),2):
+                    li_t = (listaL[x-1], float(listaL[x]))
+                    lista_final.append(li_t)
+                    #print(lista_final)
+                #print("Lista final: ", lista_final)
+                dict[llave].tupla_sig_patron = lista_final
+                lista_final = []
         i=1
+    return dict
