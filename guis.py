@@ -7,7 +7,6 @@ def ventana_Principal():
     ventanaPrincipal.geometry("400x200+700+400")
 
     value1 = tkinter.StringVar(ventanaPrincipal)
-    value2 = tkinter.StringVar(ventanaPrincipal)
     value3 = tkinter.StringVar(ventanaPrincipal)
     value4 = tkinter.StringVar(ventanaPrincipal)
     value5 = tkinter.StringVar(ventanaPrincipal)
@@ -18,12 +17,6 @@ def ventana_Principal():
     cajaLongitudTexto = tkinter.Entry(ventanaPrincipal, textvariable = value1)
     cajaLongitudTexto.pack()
     
-    #Texto y caja longitud referncia
-    labelLogitudReferencia = tkinter.Label(ventanaPrincipal, text = "Longitud de la referencia")
-    labelLogitudReferencia.pack()
-    cajaLongitudReferencia = tkinter.Entry(ventanaPrincipal, textvariable = value2)
-    cajaLongitudReferencia.pack()
-
     #Texto y OpcionMenu para escoger la probabilidad de la referencia
     listaOpciones = ["Probabilidad más alta", "Probabilidad intermedia", "Probabilidad más baja"]
     ecogerSigReferencia = tkinter.Label(ventanaPrincipal, text = "Forma de escoger la siguiente referencia")
@@ -49,7 +42,7 @@ def ventana_Principal():
     Boton.pack()
 
     ventanaPrincipal.mainloop()
-    return(value1.get(), value2.get(), value3.get(), value4.get(), value5.get())
+    return(value1.get(), value3.get(), value4.get(), value5.get())
 
 def ventanaSecundariaConTexto(escrito):
     # Crear una ventana secundaria.

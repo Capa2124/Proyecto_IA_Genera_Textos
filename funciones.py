@@ -1,11 +1,8 @@
+import re, os, openpyxl
+import xlsxwriter as xl
 from PyPDF2 import PdfReader
 from datetime import datetime
-import re
-import os
-from os import system
 from palabra import *
-import xlsxwriter as xl
-import openpyxl
 
 def lector(inicio:int, fin:int):
     nombreLibro = "Libro_Completo"
@@ -50,7 +47,6 @@ def limpieza2(text:str):
     text.split(", ")
     return text
 
-
 def repar_palabras(libro_aReparar:str):
     libro_aReparar = libro_aReparar.replace(' v ', ' v')
     libro_aReparar = libro_aReparar.replace('llév atelo', 'llévatelo')
@@ -67,8 +63,7 @@ def repar_palabras(libro_aReparar:str):
 
 def mejora_oracion(oracion):
     oracion = oracion.capitalize()
-    #if oracion[:-1] == " ":
-    oracion = oracion[:-1]
+    
     oracion = oracion + "."
     escribe_bitacora("\nSe mejoro la oracion.\n")
     return oracion
@@ -78,7 +73,6 @@ def eliminaPreposiciones(patron:str):
     "hacia", "hasta", "mediante", "para", "por", "según", "sin", "so", "sobre", "tras", "versus", "vía"]
     patron = patron.split()
     for i in patron:
-        #Elimina las prepociones
         for j in listaPrepociones:
             rep1 = patron.count(j)
             for k in range(1, rep1+1):
@@ -88,7 +82,6 @@ def eliminaPreposiciones(patron:str):
 
 def eliminaArticulos(patron:str):
     listaArticulos = ["las", "la", "los", "lo", "el", "un", "una", "unos", "unas"]
-        #Elimina los Articulos
     patron = patron.split()
     for i in patron:
         for j in listaArticulos:
@@ -197,14 +190,6 @@ def agrega_sig_elemento(lista_palabras, lista_inicio_patron, diccionario_patrone
     escribe_bitacora("Se crea un diccionario con todos los elementos del texto y sus siguientes elementos.\n")
     return diccionario
         
-def crea_oracion(diccionario, tamanio, probabilidad, referencia = "harry"):
-    textoFinal = ""
-    for i in range(int(tamanio)):
-        escribe_bitacora("Referencia: " +  referencia + "  sig palabras: " + str(diccionario[referencia].tupla_sig_palabra) + "\n\n")
-        textoFinal += referencia + " "
-        aux = diccionario[referencia]
-        referencia = aux.get_sig_palabra(probabilidad)
-    return textoFinal
 
 def crea_Narrativa(ListaPatron:list, diccionario, numeroIteraciones:int, similarPatrones:int, referencia:str, probabilidad:str):
     textoFinal = ""
@@ -258,7 +243,7 @@ def recursiva_busca_patron(base, texto, busqueda, dict):
             return ayuda
         else:
             return busqueda-1, False, dict
-    else: #YA NO ES PATRON O NO FUE DESDE EL INICIO
+    else: 
         return busqueda-1, True, dict
         
 def es_patron(list1, list2):
@@ -327,7 +312,10 @@ def lee_excel():
                 dict[llave].diccionario_sig_palabra = columna[row].value
                 listaP=limpieza2(columna[row].value).split(", ")
                 for z in range(1,len(listaP),2):
-                    li_p = (listaP[z-1], float(listaP[z]))
+                    if listaP[z]!='':
+                        li_p = (listaP[z-1], float(listaP[z]))
+                    else:
+                        break
                     lista_finalP.append(li_p)
                 dict[llave].tupla_sig_palabra = lista_finalP
                 lista_finalP = []
@@ -337,11 +325,15 @@ def lee_excel():
                 #dict[llave].diccionario_sig_patron = list((columna[row].value).split(" "))
                 listaL=limpieza2(columna[row].value).split(", ")
                 for x in range(1,len(listaL),2):
-                    li_t = (listaL[x-1], float(listaL[x]))
+                    if listaL[x]!='':
+                        li_t = (listaL[x-1], float(listaL[x]))
+                    else:
+                        break
                     lista_final.append(li_t)
                     #print(lista_final)
                 #print("Lista final: ", lista_final)
                 dict[llave].tupla_sig_patron = lista_final
                 lista_final = []
         i=1
+    print(dict)
     return dict

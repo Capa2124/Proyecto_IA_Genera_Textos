@@ -84,5 +84,3 @@ class Palabra:
     def ordena_diccionario(self):
         self.tupla_sig_palabra = sorted(self.diccionario_sig_palabra.items(), key=operator.itemgetter(1), reverse=True) 
         self.tupla_sig_patron  = sorted(self.diccionario_sig_patron.items(), key=operator.itemgetter(1), reverse=True) 
-        
-        
